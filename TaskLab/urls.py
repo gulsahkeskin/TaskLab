@@ -20,5 +20,12 @@ from tasks import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home')
+    path('', views.home, name='home'),
+    path('create', views.create_task, name='create'),
+    path('current_tasks', views.current_tasks, name='current_tasks'),
+
+    # Auth
+    path('signup/', views.signupuser, name='signupuser'),
+    # path('logout/', views.logoutuser, name='logoutuser'),
+    path('login/', views.loginuser, name='loginuser'),
 ]
