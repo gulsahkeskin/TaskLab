@@ -1,9 +1,10 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 from .forms import TaskForm
 from .models import Task
@@ -40,12 +41,20 @@ def loginuser(request):
     if request.method == 'GET':
         return render(request, 'tasks/loginuser.html', {'form': AuthenticationForm()})
     else:
-        user = authenticate(request, username= request.POST['username'], password= request.POST['password'])
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user is None:
-            return render(request, 'tasks/loginuser.html', {'form': AuthenticationForm(), 'error': "usename and password do not match!"})
+            return render(request, 'tasks/loginuser.html',
+                          {'form': AuthenticationForm(), 'error': "username and password do not match!"})
         else:
             login(request, user)
             return redirect('current_tasks')
+
+
+@login_required
+def logoutuser(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
 
 
 @login_required
@@ -67,19 +76,42 @@ def create_task(request):
 @login_required
 def current_tasks(request):
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True)
-    return render(request, 'tasks/current_tasks.html', {'tasks': tasks})
+    return render(request, 'tasks/current.html', {'tasks': tasks})
 
 
 @login_required
-def view_tasks(request, todo_pk):
-    task = get_object_or_404(Task, pk=todo_pk, user=request.user)
+def view_tasks(request, task_pk):
+    task = get_object_or_404(Task, pk=task_pk, user=request.user)
     if request.method == 'GET':
         form = TaskForm(instance=task)
-        return render(request, 'todo/view_tasks.html', {'task': task, 'form': form})
+        return render(request, 'tasks/view_tasks.html', {'task': task, 'form': form})
     else:
         try:
             form = TaskForm(request.POST, instance=task)
             form.save()
             return redirect('current_tasks')
         except ValueError:
-            return render(request, 'todo/view_tasks.html', {'form': TaskForm(), 'error': "something's wrong"})
+            return render(request, 'tasks/view_tasks.html', {'form': TaskForm(), 'error': "something's wrong"})
+
+
+@login_required
+def complete_task(request, task_pk):
+    task = get_object_or_404(Task, pk=task_pk, user=request.user)
+    if request.method == 'POST':
+        task.datecompleted = timezone.now()
+        task.save()
+        return redirect('current_tasks')
+
+
+@login_required
+def completed(request):
+    tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
+    return render(request, 'tasks/completed.html', {'tasks': tasks})
+
+
+@login_required
+def delete_task(request, task_pk):
+    task = get_object_or_404(Task, pk=task_pk, user=request.user)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('current_tasks')
