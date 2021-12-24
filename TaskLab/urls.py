@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('create', views.create_task, name='create'),
     path('current_tasks', views.current_tasks, name='current_tasks'),
+    path('task/<int:task_pk>', views.view_tasks, name='view_tasks'),
 
     # Auth
     path('signup/', views.signupuser, name='signupuser'),

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import TaskForm
 from .models import Task
@@ -68,3 +68,18 @@ def create_task(request):
 def current_tasks(request):
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True)
     return render(request, 'tasks/current_tasks.html', {'tasks': tasks})
+
+
+@login_required
+def view_tasks(request, todo_pk):
+    task = get_object_or_404(Task, pk=todo_pk, user=request.user)
+    if request.method == 'GET':
+        form = TaskForm(instance=task)
+        return render(request, 'todo/view_tasks.html', {'task': task, 'form': form})
+    else:
+        try:
+            form = TaskForm(request.POST, instance=task)
+            form.save()
+            return redirect('current_tasks')
+        except ValueError:
+            return render(request, 'todo/view_tasks.html', {'form': TaskForm(), 'error': "something's wrong"})
