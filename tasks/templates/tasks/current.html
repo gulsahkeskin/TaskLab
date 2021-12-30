@@ -5,6 +5,8 @@
         <div class="col-md-4" style="background-color: pink; height: 100%">
             {% if tasks %}
                 <div class="list-group">
+                    <h3>Backlog</h3>
+                    <a role="button" class="btn btn-primary" href="{% url 'create' %}">Add New Task</a>
                     {% for task in tasks %}
                         <a href="{% url 'view_tasks' task.id %}"
                            class="list-group-item list-group-item-action{% if task.important %} list-group-item-danger{% endif %}"><b>{{ task.title }}</b>
@@ -23,6 +25,7 @@
         <div class="col-md-4">
             {% if tasks %}
                 <div class="list-group">
+                    <h3>In progress</h3>
                     {% for task in tasks %}
                         <a href="{% url 'view_tasks' task.id %}"
                            class="list-group-item list-group-item-action{% if task.important %} list-group-item-danger{% endif %}"><b>{{ task.title }}</b>
@@ -33,7 +36,7 @@
                 <div class="text-center">
                     <h2>Looks like you don't have any tasks! Nice work.</h2>
                     <br>
-                    <a role="button" class="btn btn-primary" href="{% url 'create' %}">New Task</a>
+                    <a role="button" class="btn btn-primary" href="{% url 'create' %}">Add New Task</a>
                 </div>
             {% endif %}
         </div>
@@ -41,10 +44,17 @@
         <div class="col-md-4">
             {% if tasks %}
                 <div class="list-group">
+                    <h3>Completed</h3>
                     {% for task in tasks %}
-                        <a href="{% url 'view_tasks' task.id %}"
-                           class="list-group-item list-group-item-action{% if task.important %} list-group-item-danger{% endif %}"><b>{{ task.title }}</b>
-                            {% if task.memo %} - {{ task.memo|truncatechars:30 }}{% endif %}</a>
+                        <li>
+                            <a href="{% url 'view_tasks' task.id %}">
+                                {% if task.important %}
+                                    <b>{% endif %}{{ task.title }}{% if task.important %}</b>
+                            {% endif %}
+                                {% if task.memo %} - {{ task.memo }}{% endif %}
+                                {{ task.date_completed|date:'M j Y H:i' }}
+                            </a>
+                        </li>
                     {% endfor %}
                 </div>
             {% else %}
