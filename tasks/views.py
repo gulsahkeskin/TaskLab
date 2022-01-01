@@ -100,7 +100,7 @@ def complete_task(request, task_pk):
     if request.method == 'POST':
         task.datecompleted = timezone.now()
         task.save()
-        return redirect('current_tasks')
+        return redirect('completed')
 
 
 @login_required

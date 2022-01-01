@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 
 from tasks import views
 
@@ -26,6 +27,7 @@ urlpatterns = [
     path('task/<int:task_pk>', views.view_tasks, name='view_tasks'),
     path('task/<int:task_pk>/complete_task', views.complete_task, name='complete_task'),
     path('completed/', views.completed, name='completed'),
+    path('completed/', TemplateView.as_view(template_name='completed.html'), name='completed'),
     path('task/<int:task_pk>/delete', views.delete_task, name='delete_task'),
 
     # Auth
