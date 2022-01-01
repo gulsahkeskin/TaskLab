@@ -10,8 +10,8 @@
                     {% if task.important %}
                         <b>{% endif %}{{ task.title }}{% if task.important %}</b>
                 {% endif %}
-                    {% if task.memo %} - {{ task.memo }}{% endif %}
-                    {{ task.date_completed|date:'M j Y H:i' }}
+                    {% if task.memo %} --- {{ task.memo }}{% endif %}
+                    {{ task.datecompleted|date:'M j Y H:i' }}
                 </a>
             </li>
         {% endfor %}
