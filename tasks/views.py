@@ -104,6 +104,15 @@ def complete_task(request, task_pk):
 
 
 @login_required
+def list(request, task_pk):
+    task = get_object_or_404(Task, pk=task_pk, user=request.user)
+    if request.method == 'POST':
+        task.datecompleted = timezone.now()
+        task.save()
+        return redirect('completed-list')
+
+
+@login_required
 def completed(request):
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
     return render(request, 'tasks/completed.html', {'tasks': tasks})
