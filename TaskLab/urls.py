@@ -29,7 +29,7 @@ urlpatterns = [
     path('completed/', views.completed, name='completed'),
     path('completed/', TemplateView.as_view(template_name='completed.html'), name='completed'),
     path('list/', views.yourlist, name='yourlist'),
-    path('progress/<int:task_pk>', views.progress, name='progress'),
+    path('filter/', views.filter, name='filter'),
     path('list/', TemplateView.as_view(template_name='list.html'), name='yourlist'),
     path('task/<int:task_pk>/delete', views.delete_task, name='delete_task'),
 
