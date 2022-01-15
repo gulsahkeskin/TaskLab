@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row justify-content-center mt-5" style="height: 100%">
     <div class="col-md-4" style="height: 100%">
-{#    <div class="col-md-4" style="background-color: lightgoldenrodyellow; height: 100%">#}
+        {#    <div class="col-md-4" style="background-color: lightgoldenrodyellow; height: 100%">#}
         <h3>Backlog</h3>
         {% if tasks %}
             <div class="list-group">
@@ -11,7 +11,8 @@
                 {% for task in tasks %}
                     <a href="{% url 'view_tasks' task.id %}"
                        class="list-group-item list-group-item-action{% if task.important %} list-group-item-danger{% endif %}"><b>{{ task.title }}</b>
-                        {% if task.memo %} - {{ task.memo|truncatechars:30 }}{% endif %}</a>
+                        {% if task.memo %} - {{ task.memo|truncatechars:50 }}{% endif %}</a>
+
                 {% endfor %}
             </div>
         {% else %}
@@ -25,43 +26,17 @@
 
     <div class="col-md-4">
         <h3>In progress</h3>
-        {% if tasks %}
-            <div class="list-group">
-                {% for task in tasks %}
-                    <a href="{% url 'view_tasks' task.id %}"
-                       class="list-group-item list-group-item-action{% if task.important %} list-group-item-danger{% endif %}"><b>{{ task.title }}</b>
-                        {% if task.memo %} - {{ task.memo|truncatechars:30 }}{% endif %}</a>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="text-center">
-                <h2>Start now! Drag your tasks here.</h2>
-                <br>
-            </div>
-        {% endif %}
+        <br><br>
+        {% block content2 %}
+            <iframe id="frame2" height=95% width="100%" frameBorder="0" src={% url 'filter' %}></iframe>
+        {% endblock %}
     </div>
 
     <div class="col-md-4">
     <h3>Completed</h3>
-    {#        <div>{% include 'completed' %}</div>#}
-
+    <br><br>
     {% block content1 %}
-        <iframe id="frame" height=95% width="100%" frameBorder="0" src={% url 'completed' %}></iframe>
-
-{#        <ul>#}
-{#            {% for task in tasks %}#}
-{#                <li>#}
-{#                #}
-{#                    <a href="{% url 'view_tasks' task.id %}">#}
-{#                        {% if task.important %}#}
-{#                            <b>{% endif %}{{ task.title }}{% if task.important %}</b>#}
-{#                    {% endif %}#}
-{#                        {% if task.memo %} - {{ task.memo }}{% endif %}#}
-{#                        {{ task.datecompleted|date:'M j Y H:i' }}#}
-{#                    </a>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
+        <iframe id="frame" height=95% width="100%" frameBorder="0" src={% url 'yourlist' %}></iframe>
 
     {% endblock %}
 

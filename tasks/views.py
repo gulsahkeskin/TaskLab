@@ -79,6 +79,12 @@ def current_tasks(request):
     return render(request, 'tasks/current.html', {'tasks': tasks})
 
 
+# @login_required
+# def progress(request):
+#     tasks = Task.objects.filter(user=request.user, progress__isnull=False)
+#     return render(request, 'tasks/progress.html', {'tasks': tasks})
+
+
 @login_required
 def view_tasks(request, task_pk):
     task = get_object_or_404(Task, pk=task_pk, user=request.user)
@@ -104,12 +110,18 @@ def complete_task(request, task_pk):
 
 
 @login_required
-def list(request, task_pk):
+def progress(request, task_pk):
     task = get_object_or_404(Task, pk=task_pk, user=request.user)
     if request.method == 'POST':
-        task.datecompleted = timezone.now()
+        task.progress = True
         task.save()
-        return redirect('completed-list')
+        return redirect('current')
+
+
+@login_required
+def yourlist(request):
+    tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
+    return render(request, 'tasks/list.html', {'tasks': tasks})
 
 
 @login_required
@@ -117,6 +129,10 @@ def completed(request):
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
     return render(request, 'tasks/completed.html', {'tasks': tasks})
 
+@login_required
+def filter(request):
+    tasks = Task.objects.filter(user=request.user, progress__isnull=False, datecompleted__isnull=True)
+    return render(request, 'tasks/filter.html', {'tasks': tasks})
 
 @login_required
 def delete_task(request, task_pk):
