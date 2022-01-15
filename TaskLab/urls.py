@@ -28,7 +28,9 @@ urlpatterns = [
     path('task/<int:task_pk>/complete_task', views.complete_task, name='complete_task'),
     path('completed/', views.completed, name='completed'),
     path('completed/', TemplateView.as_view(template_name='completed.html'), name='completed'),
-    # path('list/', TemplateView.as_view(template_name='list.html'), name='completed-list'),
+    path('list/', views.yourlist, name='yourlist'),
+    path('progress/<int:task_pk>', views.progress, name='progress'),
+    path('list/', TemplateView.as_view(template_name='list.html'), name='yourlist'),
     path('task/<int:task_pk>/delete', views.delete_task, name='delete_task'),
 
     # Auth
