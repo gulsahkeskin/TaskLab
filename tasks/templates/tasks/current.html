@@ -12,7 +12,6 @@
                     <a href="{% url 'view_tasks' task.id %}"
                        class="list-group-item list-group-item-action{% if task.important %} list-group-item-danger{% endif %}"><b>{{ task.title }}</b>
                         {% if task.memo %} - {{ task.memo|truncatechars:50 }}{% endif %}</a>
-
                 {% endfor %}
             </div>
         {% else %}

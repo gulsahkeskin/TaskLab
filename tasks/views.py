@@ -75,14 +75,8 @@ def create_task(request):
 
 @login_required
 def current_tasks(request):
-    tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True)
+    tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True).order_by('-created')
     return render(request, 'tasks/current.html', {'tasks': tasks})
-
-
-# @login_required
-# def progress(request):
-#     tasks = Task.objects.filter(user=request.user, progress__isnull=False)
-#     return render(request, 'tasks/progress.html', {'tasks': tasks})
 
 
 @login_required
@@ -129,10 +123,12 @@ def completed(request):
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
     return render(request, 'tasks/completed.html', {'tasks': tasks})
 
+
 @login_required
 def filter(request):
     tasks = Task.objects.filter(user=request.user, progress__isnull=False, datecompleted__isnull=True)
     return render(request, 'tasks/filter.html', {'tasks': tasks})
+
 
 @login_required
 def delete_task(request, task_pk):
