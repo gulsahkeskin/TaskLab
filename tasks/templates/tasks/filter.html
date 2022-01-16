@@ -14,6 +14,8 @@
 {% block content %}
     <ul>
         {% for task in tasks %}
+            <div class="list-group">
+
             {% if task.progress %}
                 <li>
                 {% if task.important %}
@@ -23,11 +25,11 @@
                     {% endif %}
                 </li>
             {% endif %}
-
+            </div>
         {% endfor %}
     </ul>
-
 {% endblock %}
+
 <style>
 
 </style>
