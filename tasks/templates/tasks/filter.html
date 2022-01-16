@@ -14,13 +14,12 @@
 {% block content %}
     <ul>
         {% for task in tasks %}
-
             {% if task.progress %}
                 <li>
                 {% if task.important %}
-                    <p><b>{{ task.title }}</b></p>
+                    <p><b>{{ task.title }} {% if task.memo %} --- {{ task.memo }}{% endif %}</b></p>
                     {% else %}
-                    <p>{{ task.title }}</p>
+                    <p>{{ task.title }} {% if task.memo %} --- {{ task.memo }}{% endif %}</p>
                     {% endif %}
                 </li>
             {% endif %}
